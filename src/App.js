@@ -1,25 +1,29 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useEffect, useState } from 'react'
+import "./App.css"
 
-function App() {
+const App = () => {
+  const [quote , setQuote] =useState([]);
+  const [author , setAuthor] =useState([]);
+  useEffect(()=>{
+    getNewQuote();
+  },[]);
+
+  const getNewQuote = async()=>{
+    let result = await fetch('http://localhost:3006/home');
+    const data = await result.json();
+    console.log(result);
+    setQuote(data.quoteText);
+    setAuthor(data.quoteAuthor);
+  }
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <div className="quote">
+       <h2>" {quote}"</h2>
+       <small>'-{author}-'</small>
+    </div><br />
+    <button className="btn" onClick={getNewQuote}>Get New Quote</button>
+</div>
   );
 }
 
-export default App;
+export default App
